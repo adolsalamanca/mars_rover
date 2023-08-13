@@ -32,8 +32,8 @@ fn read_coordinate(input: &mut String) -> i64{
             exit(-1);
         }
     };
-    input.clear();
 
+    input.clear();
     x
 }
 
