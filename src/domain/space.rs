@@ -1,4 +1,6 @@
 
+#[allow(dead_code)]
+#[derive(Debug)]
 pub struct Map {
     upper_left_limit: Point,
     upper_right_limit: Point,
@@ -10,22 +12,10 @@ pub struct Map {
 impl Map {
     pub fn new(length_dimension: i64, width_dimension: i64, obstacles:Vec<Point>) -> Self {
         Self {
-            upper_left_limit: Point {
-                x: -width_dimension,
-                y: length_dimension,
-            },
-            upper_right_limit: Point {
-                x: width_dimension,
-                y: length_dimension,
-            },
-            lower_left_limit: Point {
-                x: -width_dimension,
-                y: -length_dimension,
-            },
-            lower_right_limit: Point {
-                x: width_dimension,
-                y: -length_dimension,
-            },
+            upper_left_limit: Point::new(-width_dimension, length_dimension),
+            upper_right_limit: Point::new(width_dimension, length_dimension),
+            lower_left_limit: Point::new(-width_dimension, -length_dimension),
+            lower_right_limit: Point::new(width_dimension, -length_dimension),
 
             obstacles,
         }

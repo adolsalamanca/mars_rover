@@ -1,4 +1,4 @@
-use crate::domain::space::Point;
+use crate::domain::space::Map;
 use std::io;
 use std::process::exit;
 
@@ -6,17 +6,17 @@ mod domain;
 
 fn main() {
     let mut input = String::new();
-    println!("Enter x coordinate:");
-    let x:i64 = read_coordinate(&mut input);
+    println!("Enter planet height:");
+    let length:i64 = read_number(&mut input);
 
-    println!("Enter y coordinate:");
-    let y:i64 = read_coordinate(&mut input);
+    println!("Enter planet width:");
+    let width:i64 = read_number(&mut input);
 
-    let p = create_point(x,y);
+    let p = Map::new(length, width, vec![]);
     println!("{:?}", p)
 }
 
-fn read_coordinate(input: &mut String) -> i64{
+fn read_number(input: &mut String) -> i64{
     match io::stdin().read_line(input){
         Ok(number) => number,
         Err(_) => {
@@ -35,21 +35,4 @@ fn read_coordinate(input: &mut String) -> i64{
 
     input.clear();
     x
-}
-
-fn create_point(x: i64, y: i64) -> Point{
-    Point::new(x,y)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_create_point() {
-        let p = create_point(1,2);
-
-        assert_eq!(1, p.x);
-        assert_eq!(2, p.y);
-    }
 }
