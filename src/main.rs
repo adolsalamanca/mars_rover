@@ -1,22 +1,40 @@
 use crate::domain::space::Point;
 use std::io;
+use std::process::exit;
 
 mod domain;
 
 fn main() {
     let mut input = String::new();
     println!("Enter x coordinate:");
-    io::stdin().read_line(&mut input).unwrap();
-    let x:i64 = input.trim().parse().unwrap();
-    input.clear();
+    let x:i64 = read_coordinate(&mut input);
 
     println!("Enter y coordinate:");
-    io::stdin().read_line(&mut input).unwrap();
-    let y:i64 = input.trim().parse().unwrap();
+    let y:i64 = read_coordinate(&mut input);
 
     let p = create_point(x,y);
-
     println!("{:?}", p)
+}
+
+fn read_coordinate(input: &mut String) -> i64{
+    match io::stdin().read_line(input){
+        Ok(number) => number,
+        Err(_) => {
+            eprintln!("error: cannot read the line");
+            exit(-1);
+        }
+    };
+
+    let x:i64 = match input.trim().parse(){
+        Ok(number) => number,
+        Err(_) => {
+            eprintln!("error: invalid value for the coordinate, it needs to be a number");
+            exit(-1);
+        }
+    };
+    input.clear();
+
+    x
 }
 
 fn create_point(x: i64, y: i64) -> Point{
