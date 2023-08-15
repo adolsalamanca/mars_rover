@@ -1,19 +1,20 @@
 use crate::domain::space::{Map, Point};
-use std::io;
-use std::process::exit;
 use rand::Rng;
+use application::input;
+
 mod domain;
+mod application;
 
 fn main() {
     let mut input = String::new();
     println!("Enter planet height:");
-    let length:i64 = read_number(&mut input);
+    let length:i64 = input::read_number(&mut input);
 
     println!("Enter planet width:");
-    let width:i64 = read_number(&mut input);
+    let width:i64 = input::read_number(&mut input);
 
     println!("Enter number of obstacles:");
-    let number_of_obstacles:i64 = read_number(&mut input);
+    let number_of_obstacles:i64 = input::read_number(&mut input);
     if number_of_obstacles < 0 {
         eprintln!("error: obstacles need to be equal or higher than 0");
         return
@@ -29,25 +30,4 @@ fn main() {
 
     let p = Map::new(length, width, obstacles);
     println!("{:?}", p)
-}
-
-fn read_number(input: &mut String) -> i64{
-    match io::stdin().read_line(input){
-        Ok(number) => number,
-        Err(_) => {
-            eprintln!("error: cannot read the line");
-            exit(-1);
-        }
-    };
-
-    let x:i64 = match input.trim().parse(){
-        Ok(number) => number,
-        Err(_) => {
-            eprintln!("error: invalid value for the coordinate, it needs to be a number");
-            exit(-1);
-        }
-    };
-
-    input.clear();
-    x
 }
