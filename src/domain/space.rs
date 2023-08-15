@@ -48,11 +48,11 @@ impl Map {
         }
     }
 
-    fn is_obstacles_free(&self, p: Point) -> bool {
+    pub fn is_obstacles_free(&self, p: Point) -> bool {
         !self.obstacles.contains(&p)
     }
 
-    fn is_inside_limits(&self, p:Point) -> bool {
+    pub fn is_inside_limits(&self, p:Point) -> bool {
         if p.x > self.upper_right_limit.x || p.x < self.lower_left_limit.x {
             return false
         }
@@ -62,10 +62,6 @@ impl Map {
 
         true
     }
-
-    pub fn can_move_to(&self, p: Point) -> bool {
-        self.is_inside_limits(p.clone()) && self.is_obstacles_free(p)
-    }
 }
 
 #[cfg(test)]
@@ -73,7 +69,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_create_map() {
+    fn should_create_map_given_dimensions() {
         let m = Map::new(1, 1, vec![]);
 
         assert_eq!(Point{x:1, y:1}, m.upper_right_limit);
@@ -83,7 +79,7 @@ mod tests {
     }
 
     #[test]
-    fn test_is_obstacle_present_return_true_if_there_is() {
+    fn should_find_obstacles_when_present() {
         let obstacle_point = Point::new(1, 1);
         let map = Map::new(2, 2, vec![obstacle_point.clone()]);
         let point = Point::new(1, 2);
@@ -93,7 +89,7 @@ mod tests {
     }
 
     #[test]
-    fn test_is_inside_limits() {
+    fn should_identify_properly_map_limits() {
         let m = Map::new(2, 2, vec![]);
         let inside_limits_point = Point::new(1, 1);
         let outside_limits_point = Point::new(3, 2);
@@ -109,19 +105,12 @@ mod tests {
     }
 
     #[test]
-    fn test_can_move_to_point() {
-        let obstacle_point = Point::new(1, 1);
-        let map = Map::new(2, 2, vec![obstacle_point.clone()]);
-        let outside_map_point = Point::new(3, 2);
-        let legal_map_point = Point::new(1, 2);
+    fn should_follow_orders_successfully(){
 
-        assert_eq!(false, map.can_move_to(obstacle_point));
-        assert_eq!(false, map.can_move_to(outside_map_point));
-        assert_eq!(true, map.can_move_to(legal_map_point));
     }
 
     #[test]
-    fn test_follow_orders_succeeded(){
+    fn should_stop_after_a_wrong_order(){
 
     }
 }

@@ -34,7 +34,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn read_integer_number_should_succeed() {
+    fn should_read_integer_properly() {
         let valid_input = b"3";
 
         let n = read_number(&valid_input[..]);
@@ -43,7 +43,7 @@ mod tests {
     }
 
     #[test]
-    fn read_invalid_character_should_error() {
+    fn should_fail_reading_a_letter() {
         let invalid_input = b"x";
 
         let n = read_number(&invalid_input[..]);
@@ -52,7 +52,7 @@ mod tests {
     }
 
     #[test]
-    fn read_negative_number_should_error() {
+    fn should_fail_reading_negative_number() {
         let invalid_input = b"-3";
 
         let n = read_number(&invalid_input[..]);
