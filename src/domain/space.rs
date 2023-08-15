@@ -8,7 +8,7 @@ pub struct Map {
     lower_right_limit: Point,
     obstacles: Vec<Point>,
 }
-
+#[allow(dead_code)]
 impl Map {
     pub fn new(length_dimension: i64, width_dimension: i64, obstacles:Vec<Point>) -> Self {
         Self {
@@ -20,6 +20,10 @@ impl Map {
             obstacles,
         }
     }
+
+    pub fn is_obstacle_present(&self, p: Point) -> bool {
+        return self.obstacles.contains(&p)
+    }
 }
 
 #[cfg(test)]
@@ -28,18 +32,28 @@ mod tests {
 
     #[test]
     fn test_create_map() {
-        let p = Map::new(1, 1, vec![]);
+        let m = Map::new(1, 1, vec![]);
 
-        assert_eq!(Point{x:1, y:1}, p.upper_right_limit);
-        assert_eq!(Point{x:-1, y:1}, p.upper_left_limit);
-        assert_eq!(Point{x:1, y:-1}, p.lower_right_limit);
-        assert_eq!(Point{x:-1, y:-1}, p.lower_left_limit);
+        assert_eq!(Point{x:1, y:1}, m.upper_right_limit);
+        assert_eq!(Point{x:-1, y:1}, m.upper_left_limit);
+        assert_eq!(Point{x:1, y:-1}, m.lower_right_limit);
+        assert_eq!(Point{x:-1, y:-1}, m.lower_left_limit);
+    }
+
+    #[test]
+    fn test_is_obstacle_present_return_true_if_there_is() {
+        let obstacle_point = Point::new(1, 1);
+        let m = Map::new(2, 2, vec![obstacle_point.clone()]);
+
+        let point = Point::new(1, 2);
+        assert_eq!(true, m.is_obstacle_present(obstacle_point));
+        assert_eq!(false, m.is_obstacle_present(point));
     }
 }
 
 
 
-#[derive(PartialEq, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Point {
     pub x: i64,
     pub y: i64,
