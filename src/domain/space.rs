@@ -41,7 +41,7 @@ impl Map {
     }
 
     fn is_obstacles_free(&self, p: Point) -> bool {
-        return !self.obstacles.contains(&p)
+        !self.obstacles.contains(&p)
     }
 
     fn is_inside_limits(&self, p:Point) -> bool {
@@ -52,11 +52,11 @@ impl Map {
             return false
         }
 
-        return true
+        true
     }
 
-    fn can_move_to(&self, p: Point) -> bool {
-        return self.is_inside_limits(p.clone()) && self.is_obstacles_free(p)
+    pub fn can_move_to(&self, p: Point) -> bool {
+        self.is_inside_limits(p.clone()) && self.is_obstacles_free(p)
     }
 }
 
