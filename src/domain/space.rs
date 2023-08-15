@@ -1,4 +1,5 @@
 #[allow(dead_code)]
+#[derive(Debug, PartialEq)]
 pub enum Direction {
     N,
     S,
@@ -103,15 +104,5 @@ mod tests {
         assert_eq!(false, m.is_inside_limits(outside_limits_point_b));
         assert_eq!(false, m.is_inside_limits(outside_limits_point_c));
         assert_eq!(false, m.is_inside_limits(outside_limits_point_d));
-    }
-
-    #[test]
-    fn should_follow_orders_successfully(){
-
-    }
-
-    #[test]
-    fn should_stop_after_a_wrong_order(){
-
     }
 }
