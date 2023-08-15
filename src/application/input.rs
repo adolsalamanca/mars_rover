@@ -1,24 +1,21 @@
-use std::eprintln;
 use std::io::BufRead;
 use std::num::ParseIntError;
-use std::process::exit;
+use crate::domain::space::Movement;
 
 #[derive(Debug, PartialEq)]
 pub enum Errors {
     InvalidInput,
+    InvalidCommand,
 }
 pub fn read_number<R>(mut reader: R) -> Result<u64, Errors>
 where
     R: BufRead
 {
     let mut str = String::new();
-    match reader.read_line(&mut str){
-        Ok(number) => number,
-        Err(_) => {
-            eprintln!("error: cannot read the line");
-            exit(-1);
-        }
-    };
+    let result = reader.read_line(&mut str);
+    if result.is_err(){
+        return Err(Errors::InvalidInput)
+    }
 
     let number:Result<u64, ParseIntError> = str.trim().parse();
     if number.is_err() {
@@ -27,14 +24,58 @@ where
 
     Ok(number.unwrap())
 }
+pub fn read_commands<R>(mut reader: R) -> Result<Vec<Movement>, Errors>
+where
+    R: BufRead
+{
+    let mut str = String::new();
+    let result = reader.read_line(&mut str);
+    if result.is_err(){
+        return Err(Errors::InvalidInput)
+    }
+
+    let commands: Result<Vec<Movement>, Errors> = str
+        .trim()
+        .split(",")
+        .map(|c| match c {
+            "F" => Ok(Movement::F),
+            "B" => Ok(Movement::B),
+            "L" => Ok(Movement::L),
+            "R" => Ok(Movement::R),
+            _ => Err(Errors::InvalidCommand),
+        })
+        .collect();
+
+    commands
+}
 
 
 #[cfg(test)]
 mod tests {
+    use crate::application::input::Errors::InvalidCommand;
     use super::*;
 
     #[test]
-    fn should_read_integer_properly() {
+    fn should_read_commands_properly_if_all_are_valid() {
+        let valid_input = b"F,B,L,R";
+
+        let n = read_commands(&valid_input[..]);
+        let expected_commands:Vec<Movement> = vec![Movement::F, Movement::B, Movement::L, Movement::R];
+
+        assert_eq!(Ok(expected_commands), n);
+    }
+
+    #[test]
+    fn should_fail_after_reading_commands_that_include_one_invalid() {
+        let valid_input = b"F,B,X,R";
+
+        let n = read_commands(&valid_input[..]);
+
+        assert_eq!(Err(InvalidCommand), n);
+    }
+
+    #[test]
+    fn should_read_number_properly_if_is_an_integer() {
         let valid_input = b"3";
 
         let n = read_number(&valid_input[..]);
@@ -43,7 +84,7 @@ mod tests {
     }
 
     #[test]
-    fn should_fail_reading_a_letter() {
+    fn should_fail_reading_number_if_is_a_letter() {
         let invalid_input = b"x";
 
         let n = read_number(&invalid_input[..]);
@@ -52,7 +93,7 @@ mod tests {
     }
 
     #[test]
-    fn should_fail_reading_negative_number() {
+    fn should_fail_reading_number_if_is_a_negative_number() {
         let invalid_input = b"-3";
 
         let n = read_number(&invalid_input[..]);

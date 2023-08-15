@@ -7,6 +7,7 @@ pub enum Direction {
 }
 
 #[allow(dead_code)]
+#[derive(Debug, PartialEq)]
 pub enum Movement {
     F,
     B,
