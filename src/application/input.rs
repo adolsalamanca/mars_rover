@@ -1,8 +1,18 @@
-use std::{eprintln, io};
+use std::eprintln;
+use std::io::BufRead;
+use std::num::ParseIntError;
 use std::process::exit;
 
-pub fn read_number(input: &mut String) -> i64{
-    match io::stdin().read_line(input){
+#[derive(Debug, PartialEq)]
+pub enum Errors {
+    InvalidInput,
+}
+pub fn read_number<R>(mut reader: R) -> Result<u64, Errors>
+where
+    R: BufRead
+{
+    let mut str = String::new();
+    match reader.read_line(&mut str){
         Ok(number) => number,
         Err(_) => {
             eprintln!("error: cannot read the line");
@@ -10,14 +20,43 @@ pub fn read_number(input: &mut String) -> i64{
         }
     };
 
-    let x:i64 = match input.trim().parse(){
-        Ok(number) => number,
-        Err(_) => {
-            eprintln!("error: invalid value for the coordinate, it needs to be a number");
-            exit(-1);
-        }
-    };
+    let number:Result<u64, ParseIntError> = str.trim().parse();
+    if number.is_err() {
+        return Err(Errors::InvalidInput)
+    }
 
-    input.clear();
-    x
+    Ok(number.unwrap())
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn read_integer_number_should_succeed() {
+        let valid_input = b"3";
+
+        let n = read_number(&valid_input[..]);
+
+        assert_eq!(Ok(3), n);
+    }
+
+    #[test]
+    fn read_invalid_character_should_error() {
+        let invalid_input = b"x";
+
+        let n = read_number(&invalid_input[..]);
+
+        assert_eq!(Err(Errors::InvalidInput), n);
+    }
+
+    #[test]
+    fn read_negative_number_should_error() {
+        let invalid_input = b"-3";
+
+        let n = read_number(&invalid_input[..]);
+
+        assert_eq!(Err(Errors::InvalidInput), n);
+    }
 }

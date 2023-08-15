@@ -1,3 +1,4 @@
+use std::io;
 use crate::domain::space::{Map, Point};
 use rand::Rng;
 use application::input;
@@ -5,29 +6,41 @@ use application::input;
 mod domain;
 mod application;
 
-fn main() {
-    let mut input = String::new();
-    println!("Enter planet height:");
-    let length:i64 = input::read_number(&mut input);
+fn main() -> Result<(), &'static str>{
+    let input = io::stdin().lock();
+    println!("Enter planet length:");
+    let res = input::read_number(input);
+    let length = match res {
+        Ok(value) => value,
+        Err(_) => {return Err("error: could not read number")}
+    };
 
+    let input = io::stdin().lock();
     println!("Enter planet width:");
-    let width:i64 = input::read_number(&mut input);
+    let res = input::read_number(input);
+    let width = match res {
+        Ok(value) => value,
+        Err(_) => {return Err("error: could not read number")}
+    };
 
-    println!("Enter number of obstacles:");
-    let number_of_obstacles:i64 = input::read_number(&mut input);
-    if number_of_obstacles < 0 {
-        eprintln!("error: obstacles need to be equal or higher than 0");
-        return
-    }
+    let input = io::stdin().lock();
+    println!("Enter the number of obstacles:");
+    let res = input::read_number(input);
+    let number_of_obstacles = match res {
+        Ok(value) => value,
+        Err(_) => {return Err("error: could not read number")}
+    };
 
     let mut obstacles:Vec<Point> = Vec::new();
     let mut random_generator = rand::thread_rng();
     for _ in 0..number_of_obstacles {
-        let x = random_generator.gen_range(-width..width+1);
-        let y = random_generator.gen_range(-length..length+1);
+        let x = random_generator.gen_range(-(width as i64)..width as i64+1);
+        let y = random_generator.gen_range(-(length as i64)..length as i64+1);
         obstacles.push(Point::new(x,y))
     }
 
     let p = Map::new(length, width, obstacles);
-    println!("{:?}", p)
+    println!("{:?}", p);
+
+    Ok(())
 }

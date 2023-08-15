@@ -6,6 +6,14 @@ pub enum Direction {
     W
 }
 
+#[allow(dead_code)]
+pub enum Movement {
+    F,
+    B,
+    R,
+    L
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct Point {
     pub x: i64,
@@ -29,12 +37,12 @@ pub struct Map {
 
 #[allow(dead_code)]
 impl Map {
-    pub fn new(length_dimension: i64, width_dimension: i64, obstacles:Vec<Point>) -> Self {
+    pub fn new(length_dimension: u64, width_dimension: u64, obstacles:Vec<Point>) -> Self {
         Self {
-            upper_left_limit: Point::new(-width_dimension, length_dimension),
-            upper_right_limit: Point::new(width_dimension, length_dimension),
-            lower_left_limit: Point::new(-width_dimension, -length_dimension),
-            lower_right_limit: Point::new(width_dimension, -length_dimension),
+            upper_left_limit: Point::new(-(width_dimension as i64), length_dimension as i64),
+            upper_right_limit: Point::new(width_dimension as i64, length_dimension as i64),
+            lower_left_limit: Point::new(-(width_dimension as i64), -(length_dimension as i64)),
+            lower_right_limit: Point::new(width_dimension as i64, -(length_dimension as i64)),
 
             obstacles,
         }
@@ -110,5 +118,10 @@ mod tests {
         assert_eq!(false, map.can_move_to(obstacle_point));
         assert_eq!(false, map.can_move_to(outside_map_point));
         assert_eq!(true, map.can_move_to(legal_map_point));
+    }
+
+    #[test]
+    fn test_follow_orders_succeeded(){
+
     }
 }
