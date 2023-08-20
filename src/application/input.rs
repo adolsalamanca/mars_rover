@@ -39,8 +39,12 @@ where
         .split(",")
         .map(|c| match c {
             "F" => Ok(Movement::F),
+            "f" => Ok(Movement::F),
             "B" => Ok(Movement::B),
+            "b" => Ok(Movement::B),
             "L" => Ok(Movement::L),
+            "l" => Ok(Movement::L),
+            "r" => Ok(Movement::R),
             "R" => Ok(Movement::R),
             _ => Err(Errors::InvalidCommand),
         })

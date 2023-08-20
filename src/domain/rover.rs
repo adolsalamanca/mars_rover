@@ -7,6 +7,7 @@ pub enum Errors {
     WrongInstructions,
 }
 #[allow(dead_code)]
+#[derive(Debug)]
 pub struct Rover {
     map : Map,
     current_position: Point,

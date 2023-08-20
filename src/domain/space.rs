@@ -28,7 +28,7 @@ impl Point {
     }
 }
 #[allow(dead_code)]
-#[derive(Debug)]
+#[derive(Debug,Clone)]
 pub struct Map {
     upper_left_limit: Point,
     upper_right_limit: Point,
