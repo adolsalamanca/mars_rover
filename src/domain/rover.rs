@@ -114,6 +114,10 @@ impl Rover {
 
         Ok(self.current_position.clone())
     }
+
+    pub fn last_position(self) -> (Point, Direction) {
+        (self.current_position, self.direction)
+    }
 }
 
 #[cfg(test)]

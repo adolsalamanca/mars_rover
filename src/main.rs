@@ -68,13 +68,12 @@ fn main() -> Result<(), &'static str>{
         Ok(p) => {
             println!("Cool, the rover arrived to destiny: \n {:?}", p);
         }
-        Err(e) => {
-            eprintln!("Oh no, something went wrong: \n {:?}", e);
+        Err(_) => {
+            println!("Couldn't move to that position, last valid rover state: {:?}",rover.last_position());
+            println!("Map dimensions & Obstacles: \n {:?}", map);
         }
     }
 
-
-    println!("Obstacles: \n {:?}", map);
 
     Ok(())
 }
