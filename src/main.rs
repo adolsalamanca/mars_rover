@@ -33,18 +33,19 @@ fn main() -> Result<(), &'static str>{
         Err(_) => {return Err("error: could not read number")}
     };
 
-    // Formula to check max_obstacles given length and width for 2D maps.
-    let max_obstacles = (length + length + 1) * (width + width + 1);
+    // Formula to check max_obstacles given length and width for 2D maps
+    // then we subtract one as starting position shouldn't have an obstacle
+    let max_obstacles = (length + length + 1) * (width + width + 1) - 1;
     if number_of_obstacles > max_obstacles {
-        return Err("error: the amount of obstacles cannot be greater than the total rows")
+        return Err("error: the number of obstacles cannot be equal to the total amount of rows")
     }
 
-
+    let starting_point = Point::new(0, 0);
     let mut obstacles:Vec<Point> = Vec::new();
     let mut random_generator = rand::thread_rng();
     for _ in 0..number_of_obstacles {
         let mut p = generate_random_point(length, width, &mut random_generator);
-        while obstacles.contains(&p) {
+        while obstacles.contains(&p) || p.eq(&starting_point.clone()){
             p  = generate_random_point(length, width, &mut random_generator);
         }
 
@@ -52,7 +53,7 @@ fn main() -> Result<(), &'static str>{
     }
 
     let map = Map::new(length, width, obstacles);
-    let mut rover = Rover::new(map.clone(), Point::new(0, 0), Direction::N);
+    let mut rover = Rover::new(map.clone(), starting_point, Direction::N);
 
     let input = io::stdin().lock();
     println!("Now enter the commands to move the rover, separated by comas, valid commands: F,B,L,R");
