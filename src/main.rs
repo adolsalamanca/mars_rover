@@ -82,6 +82,5 @@ fn main() -> Result<(), &'static str>{
 fn generate_random_point(length: u64, width: u64, random_generator: &mut ThreadRng) -> Point {
     let x = random_generator.gen_range(-(width as i64)..width as i64 + 1);
     let y = random_generator.gen_range(-(length as i64)..length as i64 + 1);
-    let p = Point::new(x, y);
-    p
+    Point::new(x, y)
 }

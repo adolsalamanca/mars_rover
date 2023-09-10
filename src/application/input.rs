@@ -36,7 +36,7 @@ where
 
     let commands: Result<Vec<Movement>, Errors> = str
         .trim()
-        .split(",")
+        .split(',')
         .map(|c| match c {
             "F" => Ok(Movement::F),
             "f" => Ok(Movement::F),
