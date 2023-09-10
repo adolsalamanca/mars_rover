@@ -4,7 +4,7 @@ pub enum Direction {
     N,
     S,
     E,
-    W
+    W,
 }
 
 #[allow(dead_code)]
@@ -13,7 +13,7 @@ pub enum Movement {
     F,
     B,
     R,
-    L
+    L,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -28,7 +28,7 @@ impl Point {
     }
 }
 #[allow(dead_code)]
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct Map {
     upper_left_limit: Point,
     upper_right_limit: Point,
@@ -39,7 +39,7 @@ pub struct Map {
 
 #[allow(dead_code)]
 impl Map {
-    pub fn new(length_dimension: u64, width_dimension: u64, obstacles:Vec<Point>) -> Self {
+    pub fn new(length_dimension: u64, width_dimension: u64, obstacles: Vec<Point>) -> Self {
         Self {
             upper_left_limit: Point::new(-(width_dimension as i64), length_dimension as i64),
             upper_right_limit: Point::new(width_dimension as i64, length_dimension as i64),
@@ -54,12 +54,12 @@ impl Map {
         !self.obstacles.contains(&p)
     }
 
-    pub fn is_inside_limits(&self, p:Point) -> bool {
+    pub fn is_inside_limits(&self, p: Point) -> bool {
         if p.x > self.upper_right_limit.x || p.x < self.lower_left_limit.x {
-            return false
+            return false;
         }
         if p.y > self.upper_left_limit.y || p.y < self.lower_right_limit.y {
-            return false
+            return false;
         }
 
         true
@@ -74,10 +74,10 @@ mod tests {
     fn should_create_map_given_dimensions() {
         let m = Map::new(1, 1, vec![]);
 
-        assert_eq!(Point{x:1, y:1}, m.upper_right_limit);
-        assert_eq!(Point{x:-1, y:1}, m.upper_left_limit);
-        assert_eq!(Point{x:1, y:-1}, m.lower_right_limit);
-        assert_eq!(Point{x:-1, y:-1}, m.lower_left_limit);
+        assert_eq!(Point { x: 1, y: 1 }, m.upper_right_limit);
+        assert_eq!(Point { x: -1, y: 1 }, m.upper_left_limit);
+        assert_eq!(Point { x: 1, y: -1 }, m.lower_right_limit);
+        assert_eq!(Point { x: -1, y: -1 }, m.lower_left_limit);
     }
 
     #[test]
